@@ -1,0 +1,128 @@
+{
+  "aggregation": "mean per-image IoU on edited images; nearest-neighbor 37x37 masks",
+  "thresholds": "validation per head; best37 is test oracle over .05:.01:.95",
+  "datasets": {
+    "cocoglide": {
+      "n": 400,
+      "legacy_parity_passed": true,
+      "heads": {
+        "b0_s42": {
+          "val_thr": 0.05,
+          "mean_image_iou_at_val_thr": 0.032835828423980945,
+          "mean_image_iou_best37": 0.032835828423980945,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.5917574079171076
+        },
+        "b10_s42": {
+          "val_thr": 0.05,
+          "mean_image_iou_at_val_thr": 0.0382450774613294,
+          "mean_image_iou_best37": 0.0382450774613294,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.6428297763030993
+        },
+        "b50_s42": {
+          "val_thr": 0.05,
+          "mean_image_iou_at_val_thr": 0.05897954435966293,
+          "mean_image_iou_best37": 0.05897954435966293,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.7146625098932162
+        },
+        "b200_s42": {
+          "val_thr": 0.05,
+          "mean_image_iou_at_val_thr": 0.09834574629030948,
+          "mean_image_iou_best37": 0.09834574629030948,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.7494460160990075
+        },
+        "b1000_s42": {
+          "val_thr": 0.05,
+          "mean_image_iou_at_val_thr": 0.30641666858688327,
+          "mean_image_iou_best37": 0.30641666858688327,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.8237701180641627
+        },
+        "b5000_s42": {
+          "val_thr": 0.21999999999999997,
+          "mean_image_iou_at_val_thr": 0.3903945740554677,
+          "mean_image_iou_best37": 0.44397752891587117,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.877423978490141
+        },
+        "g2_s42": {
+          "val_thr": 0.3,
+          "mean_image_iou_at_val_thr": 0.40600583713155786,
+          "mean_image_iou_best37": 0.4512773230816829,
+          "best_thr": 0.12,
+          "pooled_pixel_auroc": 0.8735480833766038
+        },
+        "g2u_s42": {
+          "val_thr": 0.26999999999999996,
+          "mean_image_iou_at_val_thr": 0.4162398571902526,
+          "mean_image_iou_best37": 0.46013937799239996,
+          "best_thr": 0.09,
+          "pooled_pixel_auroc": 0.8823065111952897
+        }
+      }
+    },
+    "magicbrush": {
+      "n": 528,
+      "legacy_parity_passed": true,
+      "heads": {
+        "g2_s42": {
+          "val_thr": 0.3,
+          "mean_image_iou_at_val_thr": 0.06573659404969856,
+          "mean_image_iou_best37": 0.15443149871652037,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.42930604844675196
+        },
+        "g2u_s42": {
+          "val_thr": 0.26999999999999996,
+          "mean_image_iou_at_val_thr": 0.06221313634619473,
+          "mean_image_iou_best37": 0.13182100409779948,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.4288274927575861
+        }
+      }
+    },
+    "sdxl": {
+      "n": 500,
+      "legacy_parity_passed": true,
+      "heads": {
+        "g2_s42": {
+          "val_thr": 0.3,
+          "mean_image_iou_at_val_thr": 0.054628637271111766,
+          "mean_image_iou_best37": 0.10297536793184582,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.6109179016527929
+        },
+        "g2u_s42": {
+          "val_thr": 0.26999999999999996,
+          "mean_image_iou_at_val_thr": 0.04654920316460753,
+          "mean_image_iou_best37": 0.08817748137189672,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.5906432203907224
+        }
+      }
+    },
+    "autosplice": {
+      "n": 3621,
+      "legacy_parity_passed": true,
+      "heads": {
+        "g2_s42": {
+          "val_thr": 0.3,
+          "mean_image_iou_at_val_thr": 0.2802742006379986,
+          "mean_image_iou_best37": 0.4920432698783216,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.8064385847308319
+        },
+        "g2u_s42": {
+          "val_thr": 0.26999999999999996,
+          "mean_image_iou_at_val_thr": 0.2889248558346089,
+          "mean_image_iou_best37": 0.4575335782016382,
+          "best_thr": 0.05,
+          "pooled_pixel_auroc": 0.7976174305760305
+        }
+      }
+    }
+  }
+}

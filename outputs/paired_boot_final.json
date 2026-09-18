@@ -1,0 +1,93 @@
+{
+  "n_boot": 2000,
+  "rng_seed": 20260918,
+  "n_clusters_det": 783,
+  "n_clusters_loc": 487,
+  "scope": "conditional on fixed seed-42 checkpoints; excludes training randomness",
+  "points": {
+    "b0_s42": {
+      "det_auc": 0.9429666666666667,
+      "pixel_auroc": 0.6015318647171116,
+      "micro_iou": 0.06166109593951983,
+      "val_thr": 0.05
+    },
+    "g2u_s42": {
+      "det_auc": 0.9221933333333333,
+      "pixel_auroc": 0.9477075922876225,
+      "micro_iou": 0.546737331509313,
+      "val_thr": 0.26999999999999996
+    },
+    "po_bALL_s42": {
+      "det_auc": 0.9489633333333333,
+      "pixel_auroc": 0.5751951587475331,
+      "micro_iou": 0.04900747065101387,
+      "val_thr": 0.05
+    }
+  },
+  "provenance": {
+    "b0_s42": {
+      "checkpoint": "D:\\lunwen\\outputs\\weak_sup_v4_b0_s42_head.pt",
+      "sha256": "a75ad4ed25bf99b92f024af87b8ab2cb06538ad83b35a4c58db84bff3dd55869"
+    },
+    "g2u_s42": {
+      "checkpoint": "D:\\lunwen\\outputs\\weak_sup_v4_g2u_s42_head.pt",
+      "sha256": "f0459295cfef339bb8761fe6f1be6359731cb5c1a609ff2d8c61c0bfe925905f"
+    },
+    "po_bALL_s42": {
+      "checkpoint": "D:\\lunwen\\outputs\\weak_sup_v4_po_bALL_s42_head.pt",
+      "sha256": "20e6e432552d3b92bf3422a978ccd531ad7bc6bfb0c0856190385f95457796d8"
+    }
+  },
+  "comparisons": {
+    "g2u_s42_minus_b0_s42": {
+      "detection": {
+        "n_clusters": 783,
+        "n_boot": 2000,
+        "delta_auc": -0.02077333333333331,
+        "ci95_auc": [
+          -0.036223760626046625,
+          -0.004215967517498483
+        ]
+      },
+      "localization": {
+        "n_clusters": 487,
+        "n_boot": 2000,
+        "delta_auc": 0.34617572757051085,
+        "ci95_auc": [
+          0.31799583680200166,
+          0.374573769617255
+        ],
+        "ci95_iou": [
+          0.4397814268772732,
+          0.5251242526427684
+        ],
+        "delta_iou": 0.4850762355697932
+      }
+    },
+    "g2u_s42_minus_po_bALL_s42": {
+      "detection": {
+        "n_clusters": 783,
+        "n_boot": 2000,
+        "delta_auc": -0.02677000000000007,
+        "ci95_auc": [
+          -0.04334395322587459,
+          -0.010478697218928131
+        ]
+      },
+      "localization": {
+        "n_clusters": 487,
+        "n_boot": 2000,
+        "delta_auc": 0.3725124335400892,
+        "ci95_auc": [
+          0.347095250155538,
+          0.399089087302924
+        ],
+        "ci95_iou": [
+          0.4543314546840788,
+          0.5371764863749615
+        ],
+        "delta_iou": 0.4977298608582992
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+# Data, caches, and model artifacts
+data/
+INP-X/
+checkpoints/
+runs/
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+
+# Python and build output
+__pycache__/
+*.pyc
+paper/tifs/_build/
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+
+# Local configuration
+.env
+.venv/
+tmp/
