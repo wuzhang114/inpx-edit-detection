@@ -204,8 +204,7 @@ def train_weakly_supervised(
     print(f"输入维度: {in_dim}, patches: {n_patches}")
 
     # 损失: 图像级 BCE (没有 patch 级 mask 时的替代方案)
-    # 实际上我们需要 mask 来做 patch 级监督
-    # 临时方案: 用图像级标签做弱监督 (pooling后二分类)
+    # Image-level supervision uses binary classification after patch pooling.
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 

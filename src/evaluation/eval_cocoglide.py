@@ -1,6 +1,6 @@
 """v4 head 在 CocoGlide (TRAIL 官方测试集) 上的零训练迁移评测
 
-统一协议 (顶级 AI 决策): INP-X-only 训练 → INP-X validation threshold (--thr) → zero-shot
+Evaluation protocol: INP-X-only training, INP-X validation threshold (--thr), and transfer
 指标: patch AUROC/AP (TRAIL 报告协议) + fixed-thr mIoU/F1 + best-thr (参考) + 检测 AUC
 用法: python src/evaluation/eval_cocoglide.py [--head weak_sup_v4_head.pt] [--thr 0.45]
 """

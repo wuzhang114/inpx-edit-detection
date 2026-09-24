@@ -1,0 +1,58 @@
+{
+ "0": {
+  "head": "b0_s42",
+  "val_thr": 0.05,
+  "miou_at_val_thr": 0.0328,
+  "miou_best37": 0.0328,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.5918
+ },
+ "10": {
+  "head": "b10_s42",
+  "val_thr": 0.05,
+  "miou_at_val_thr": 0.0383,
+  "miou_best37": 0.0383,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.6428
+ },
+ "50": {
+  "head": "b50_s42",
+  "val_thr": 0.05,
+  "miou_at_val_thr": 0.0589,
+  "miou_best37": 0.0589,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.7147
+ },
+ "200": {
+  "head": "b200_s42",
+  "val_thr": 0.05,
+  "miou_at_val_thr": 0.0982,
+  "miou_best37": 0.0982,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.7494
+ },
+ "1000": {
+  "head": "b1000_s42",
+  "val_thr": 0.05,
+  "miou_at_val_thr": 0.3064,
+  "miou_best37": 0.3064,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.8238
+ },
+ "5000": {
+  "head": "b5000_s42",
+  "val_thr": 0.21999999999999997,
+  "miou_at_val_thr": 0.3904,
+  "miou_best37": 0.444,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.8774
+ },
+ "14731": {
+  "head": "g2_s42",
+  "val_thr": 0.3,
+  "miou_at_val_thr": 0.406,
+  "miou_best37": 0.4513,
+  "best_thr": 0.11,
+  "pixel_auroc": 0.8736
+ }
+}

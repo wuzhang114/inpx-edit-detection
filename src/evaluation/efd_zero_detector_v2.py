@@ -1,22 +1,8 @@
-"""方向三: 证据场→零训练检测器 v2 —— 修正 real 图评分。
+"""Exploratory patch-direction similarity diagnostic.
 
-v1 问题: real 图无 mask, perturb_dir 无法构造 → 全 skip。
-修正: real 图的"编辑证据"无明确方向, 应测"该图特征与整图均值的方向性"是否
-    与库中任一方向高度对齐。对无 mask 图, 用:
-      score = max-k 相似度 (该图 patch 特征与库中方向的最大相似度)
-  但这样 real 也可能偶然高。
-
-更本质: 把"检测分数"改为编辑区扰动 vs 背景扰动的分离度, real 图无 mask,
-  所以 real 图的分数 = 它自身"最编辑样 patch"与图均值的差向量 与 库的相似度。
-  用 top-1~top-10 平均, 加上**随机下采样背景**的对照(noise floor)。
-
-改进: 直接评估两种分数:
-  A) max-cos 相似度 (每图)
-  B) top-10 平均相似度
-real 图的分数按同样公式, 但真实图特征扰动无方向, 随机
-修正: 对 real 图, 用"该图所有 patch 特征与图均值的偏差方向" → 取与库
-     相似度的最大值; 同时报噪声底线。
-"""
+Compares normalized patch deviations from the image mean with a training
+direction library and averages the ten highest patch similarities.
+This historical probe is separate from the main manuscript evaluation."""
 import json
 import os
 import sys

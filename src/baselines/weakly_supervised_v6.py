@@ -1,6 +1,6 @@
 """因果隔离实验 v6: v4 单头结构 + 绑定损失 (L_exc / L_placebo), 其余完全不变。
 
-用户方案 (2026-09-07): 回答"是绑定损失有效, 还是双分支改变了检测方式?"
+This exploratory variant tests binding losses with a single detection head.
 - 保留 v4 原版: 单头 MLPHead(385→64), max(local map) detection, 20ep/128batch/
   wd=1e-4, master split, val image-AUC(max-pool) checkpoint —— 与 g1_s42 完全同规
 - 只加两个损失 (可分别开关):

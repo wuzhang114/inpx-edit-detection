@@ -1,6 +1,7 @@
-"""Evaluate final g2u on external images, with old-g2 parity and reusable maps.
+"""Evaluate final g2u on external images, with g2 parity and reusable maps.
 No suitable external feature caches were found. One backbone pass per image
 serves both endpoints and, on CocoGlide, all seven budget-specific readouts.
+MagicBrush uses the corrected alpha-mask reference, not old luminance-GT scores.
 """
 import json
 import os
@@ -32,6 +33,28 @@ def metrics(pm, gt, thr):
     return {"val_thr": float(thr), "mean_image_iou_at_val_thr": miou(thr),
             "mean_image_iou_best37": vals[j], "best_thr": float(thresholds[j]),
             "pooled_pixel_auroc": float(roc_auc_score(gt.ravel(), pm.ravel()))}
+
+
+def endpoint_parity(ds, g2_metrics):
+    """Validate the endpoint against a reference with matching mask semantics."""
+    if ds == "magicbrush":
+        reference_path = OUT / "magicbrush_corrected_reference_v20.json"
+        reference = json.loads(reference_path.read_text(encoding="utf-8"))
+        assert reference["head"] == "g2_s42" and reference["n"] == 528
+        assert reference["mask_rule"] == "edited = RGBA alpha != 255"
+        for key, expected in reference["metrics"].items():
+            np.testing.assert_allclose(g2_metrics[key], expected, atol=.0002)
+        return {"parity_passed": True, "parity_reference_type": "corrected-mask reference",
+                "parity_reference": str(reference_path), "mask_rule": reference["mask_rule"],
+                "mask_source": reference["mask_source"],
+                "legacy_parity_note": "Old external_uniform_g2.json used incorrect luminance GT and is not a valid MagicBrush reference."}
+    # Preserve the original references and tolerance for the other datasets.
+    if ds == "cocoglide":
+        old = json.loads((OUT / "cocoglide_budget_curve.json").read_text())["14731"]
+    else:
+        old = json.loads((OUT / "external_uniform_g2.json").read_text())[ds]
+    np.testing.assert_allclose(g2_metrics["mean_image_iou_best37"], old["miou_best37"], atol=.0002)
+    return {"legacy_parity_passed": True}
 
 
 def main():
@@ -71,13 +94,8 @@ def main():
         gt=np.stack(masks)
         scores={tag: np.concatenate(v) for tag,v in probs.items()}
         rows={tag: metrics(scores[tag],gt,json.loads((OUT/f"eval500_eval_{tag}.json").read_text())["val_thr"]) for tag in tags}
-        # Legacy endpoint parity, allowing the old JSON's four-decimal rounding.
-        if ds=="cocoglide":
-            old=json.loads((OUT/"cocoglide_budget_curve.json").read_text())["14731"]
-        else:
-            old=json.loads((OUT/"external_uniform_g2.json").read_text())[ds]
-        np.testing.assert_allclose(rows["g2_s42"]["mean_image_iou_best37"],old["miou_best37"],atol=.0002)
-        res["datasets"][ds]={"n":len(pairs),"legacy_parity_passed":True,"heads":rows}
+        parity = endpoint_parity(ds, rows["g2_s42"])
+        res["datasets"][ds]={"n":len(pairs),**parity,"heads":rows}
         np.savez_compressed(OUT/f"external_final_{ds}_scores.npz",paths=np.array([str(p) for p,_ in pairs]),masks=gt,**scores)
         (OUT/"external_final.json").write_text(json.dumps(res,indent=2),encoding="utf-8")
         print(ds, "g2u", rows["g2u_s42"],flush=True)

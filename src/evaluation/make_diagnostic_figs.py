@@ -1,9 +1,8 @@
-"""论文诊断图 (图 2-4 素材) — 全部基于已落盘的真实结果
+"""Historical diagnostic plots for exploratory readout configurations.
 
-图1: mask 分档失效图 — 检测 F.Acc 与定位 mIoU 随 mask 面积的变化 (v2/v3/方向VAE)
-图2: 方向性 VAE 变体消融 — 各变体全局 AUC 与 real-vs-exchanged AUC
-图3: 格式偏置诊断 — real vs standard vs exchanged 的文件大小/分辨率分布
-"""
+Plots recorded mask-size summaries, directional-feature ablations, and image
+format distributions. These plots are not the current manuscript figures.
+Unavailable linear-probe values are omitted rather than plotted as zeros."""
 import json
 from pathlib import Path
 
@@ -39,7 +38,6 @@ plt.rcParams.update({
 def fig1_mask_failure():
     # 检测 (跨域 CelebAHQ, F.Acc by mask size)
     det = {
-        "线性探针": {"小": 0.0, "中": 0.0, "大": 0.0},  # R.Acc 3.7% → F.Acc 无处参考, 用 0 占位避免误导? 不用线性探针
         "弱监督v2 (检测)": {"小": 71.2, "中": 82.0, "大": 86.3},
     }
     # 定位 (mIoU by mask size, 跨域 CelebAHQ)

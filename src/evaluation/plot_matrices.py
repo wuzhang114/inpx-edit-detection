@@ -52,7 +52,7 @@ def plot_matrix(rows, fname, title, note, fmt=".3f", cmap="RdYlGn"):
             color = "white" if v is not None and (v < 0.25 or v > 0.85) else "black"
             ax.text(j, i, txt, ha="center", va="center", fontsize=10.5, color=color,
                     fontweight="bold" if is_ours else "normal")
-    # 高亮我们的行
+    # Highlight the proposed readout in the comparison table.
     for i, (_, _, is_ours) in enumerate(rows):
         if is_ours:
             ax.add_patch(plt.Rectangle((-.5, i-.5), n_ds, 1, fill=False,

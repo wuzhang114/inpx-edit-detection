@@ -1,13 +1,8 @@
-"""核心方法分析: 容量-预算协同设计 (Capacity-Budget Co-Design)
+"""Explore readout rankings across recorded mask budgets.
 
-命题: 给定标注预算 k, 存在最优读出容量 c*(k), 且随预算变化:
-  小预算 -> 小容量 (linear, 0† 逆转)
-  大预算 -> 大容量 (30K)
-给出 c*(k) 轨迹, 若 0t/200/1000/ALL 的 argmax 确实随 k 单调增大 ->
-  规律成立, 可作为可操作设计规则 (给定预算选容量)。
-
-数据: phase_diagram (3 readout × {0t,200,1000,ALL}, 3 seed mean)
-输出: 表 + 轨迹 + 交叉验证 (留一个预算点, 预测最优容量)。
+Uses the historical phase_diagram.json summaries to tabulate scores and
+evaluate leave-one-budget-out ranking predictions. The rankings are
+configuration-specific observations, not a validated capacity scaling law.
 """
 import json
 import sys
@@ -65,8 +60,8 @@ for hold in range(len(budgets)):
     print(f"hold={budgets[hold]:>5s}: 预测 argmax={pred_am:>6s} (pred {np.round(preds,3)}) "
           f"vs 真={true_am:>6s} {ok}")
 
-# 关键: 检测维度的 argmax (检测几乎 flat -> 容量预算选择主要由定位驱动)
-print("\n=== 检测 AUC 矩阵 (验证: 容量选择不影响检测) ===")
+# Report detection scores separately from localization rankings.
+print("\n=== Detection AUC by readout and mask budget ===")
 for b in budgets:
     r = [s[a][b]["det"]["mean"] for a in archs]
     print(f"k={kmap[b]:>6d}: detection {np.round(r, 4)}")

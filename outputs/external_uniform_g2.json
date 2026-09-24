@@ -1,0 +1,26 @@
+{
+ "magicbrush": {
+  "n": 528,
+  "head": "g2_s42",
+  "miou_at_val_thr": 0.0657,
+  "miou_best37": 0.1544,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.4293
+ },
+ "sdxl": {
+  "n": 500,
+  "head": "g2_s42",
+  "miou_at_val_thr": 0.0546,
+  "miou_best37": 0.103,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.6109
+ },
+ "autosplice": {
+  "n": 3621,
+  "head": "g2_s42",
+  "miou_at_val_thr": 0.2803,
+  "miou_best37": 0.492,
+  "best_thr": 0.05,
+  "pixel_auroc": 0.8064
+ }
+}

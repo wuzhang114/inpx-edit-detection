@@ -66,23 +66,33 @@
     },
     "magicbrush": {
       "n": 528,
-      "legacy_parity_passed": true,
+      "legacy_parity_passed": false,
       "heads": {
         "g2_s42": {
           "val_thr": 0.3,
-          "mean_image_iou_at_val_thr": 0.06573659404969856,
-          "mean_image_iou_best37": 0.15443149871652037,
+          "mean_image_iou_at_val_thr": 0.10842870638437502,
+          "mean_image_iou_best37": 0.17831101827645096,
           "best_thr": 0.05,
-          "pooled_pixel_auroc": 0.42930604844675196
+          "pooled_pixel_auroc": 0.6531993015810811
         },
         "g2u_s42": {
           "val_thr": 0.26999999999999996,
-          "mean_image_iou_at_val_thr": 0.06221313634619473,
-          "mean_image_iou_best37": 0.13182100409779948,
+          "mean_image_iou_at_val_thr": 0.10219734071186211,
+          "mean_image_iou_best37": 0.1673787133842413,
           "best_thr": 0.05,
-          "pooled_pixel_auroc": 0.4288274927575861
+          "pooled_pixel_auroc": 0.6499888541739267
         }
-      }
+      },
+      "mask_correction": {
+        "rule": "edited = RGBA alpha != 255 (official author code)",
+        "source": "https://github.com/OSU-NLP-Group/MagicBrush/issues/10#issuecomment-1924847468",
+        "report": "D:\\lunwen\\outputs\\magicbrush_alpha_repair_2026-09-20\\repair_report.json",
+        "date": "2026-09-20",
+        "predictions_unchanged": true,
+        "masks_replaced": 528,
+        "prior_error": "RGBA converted to RGB then luminance, discarding alpha and treating source brightness as GT"
+      },
+      "legacy_parity_note": "Old g2 statistics used incorrect luminance GT; predictions are identical, corrected GT intentionally changes scores."
     },
     "sdxl": {
       "n": 500,

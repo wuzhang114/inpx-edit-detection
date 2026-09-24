@@ -1,4 +1,4 @@
-"""审稿修复版评测: 未见 500 对 (imdl_inpx_test.json), 严格无泄漏协议
+"""Evaluate held-out edits with validation-selected localization thresholds.
 
 流程:
 1. 从 split JSON 取排除后的验证集 val_idx (不含评测集样本)
@@ -198,7 +198,7 @@ def main():
         size_tbl[sc] = {"n": len(ks), "mIoU": float(iou)}
     print(f"size 分档: {size_tbl}")
 
-    # ---- 图级残余分组分析 (顶级 AI 决策: clean 60 vs overlap 440, 各报 CI) ----
+    # ---- 图级残余分组分析 (clean 60 vs overlap 440; confidence intervals reported separately) ----
     group_tbl = {}
     if group is not None:
         from collections import Counter as _C

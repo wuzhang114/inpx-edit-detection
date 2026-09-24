@@ -1,29 +1,10 @@
-"""EFD — Evidence Field Decomposition (证据场分解) — 想法 1 正式实现
+"""Exploratory evidence-subspace localization probe.
 
-方法 (全部无监督, 不需要训练 head):
-  Step 1 扰动场: d(x) = mean(编辑区 token) - mean(背景 token)
-              (用 INP-X 注记 mask; 只用训练池注记, 测试时用同域 mask?)
-              -> 推理时要用"盲"定位: 不能有大 mask! 所以改为:
-                d 仅用于构造证据基 (训练池); 推理用每 patch 对"本地平均"的偏离。
-  Step 2 证据子空间: SVD([d_1...d_n]) 的前 k 维 = 证据基 E_k
-              (对 exchange 对: d_s 与 d_e 同方向 -> 用两版本一起增强)
-  Step 3 推理:
-              f_patch 投影到 E_k: z_p = E_k^T (f_p - f_local)  (f_local=3x3 邻域均值?)
-              定位图: s(x) = ||z_p||  (每 patch 投影范数)
-              检测:   s_max (或能量) vs 阈值
-  关键: 推理时不用 GT mask (盲), 用 patch - 邻域平均 (局部对比) 代替扰动。
-
-初步问题: 邻域平均 = 模糊? 37x37 上 patch 与邻域距离小。
-备选 (更稳): 推理也用"双版本": 只测 INP-X exchange (有 std/exc), 此时 mask 已知
-  (评测标准协议里我们总是有 GT; 但泛化测试 SDXL 也有 mask -> 都可测)。
-  然而"盲"很重要, EFD 若依赖 GT mask 定位就没有意义了 (目标本身就是定位)。
-
-所以设计改为 (训练池用 mask 建基, 推理"盲"):
-  - 基构造 (训练池): d_i = E_edit - E_bg (用 GT mask) -> SVD -> U_k
-  - 推理 (测试): 对每 patch, 用"patch 特征 - patch 局部均值"作为局部扰动,
-    projection = U_k^T * 局部扰动, 范数 = 分数。
-    (局部均值 = 5x5 邻域平均, 相当于把"编辑区大块"视为局部高对比)
-"""
+Training masks define edited-region minus background feature vectors.
+Normalized vectors form an SVD basis. At inference, patch features are
+centered by the image-wide feature mean and projected onto this basis.
+Projection norms provide localization scores; masks are used for evaluation.
+This probe is separate from the manuscript's main trained readout."""
 import argparse
 import json
 import os
@@ -108,7 +89,7 @@ def main():
         if n_used >= args.n_anns:
             break
     V = np.stack(vecs)  # (n, dim)
-    print(f"建基矢量: {V.shape} (mean norm? 已归一化)", flush=True)
+    print(f"Normalized basis vectors: {V.shape}", flush=True)
     np.save(OUT / "efd_vecs.npy", V)
 
     # ---- Step 2: SVD 证据基 ----

@@ -1,4 +1,4 @@
-"""公平对比: 用 v2/v3/v4 头在 IMDLBenCo 相同的 INP-X 500 编辑对上评测定位
+"""Compare v2/v3/v4 readouts on the same 500 INP-X edits used by IMDLBenCo.
 
 与 eval_imdl_loc.py (MVSS) 使用同一测试集, 保证可比性。
 用法: python fair_compare_loc.py [--head <head.pt> --tag <tag>]  (指定单头)

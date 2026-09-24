@@ -1,0 +1,17 @@
+{
+  "dataset": "magicbrush",
+  "n": 528,
+  "head": "g2_s42",
+  "reference_type": "corrected-mask reference",
+  "mask_rule": "edited = RGBA alpha != 255",
+  "mask_source": "https://github.com/OSU-NLP-Group/MagicBrush/issues/10#issuecomment-1924847468",
+  "repair_report": "outputs/magicbrush_alpha_repair_2026-09-20/repair_report.json",
+  "date": "2026-09-20",
+  "metrics": {
+    "val_thr": 0.3,
+    "mean_image_iou_at_val_thr": 0.10842870638437502,
+    "mean_image_iou_best37": 0.17831101827645096,
+    "best_thr": 0.05,
+    "pooled_pixel_auroc": 0.6531993015810811
+  }
+}

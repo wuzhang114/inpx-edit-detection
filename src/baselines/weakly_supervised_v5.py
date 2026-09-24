@@ -1,6 +1,6 @@
 """弱监督 v5: 双分支 (global/local) + Exchange-Paired Spatial Binding
 
-用户方案 (2026-09-06):
+Exploratory dual-branch architecture:
 - local branch : 输出定位图, 使用 pixel BCE+Dice + L_cons + L_placebo
 - global branch: 独立 head, 输出图像级检测分, 单独监督图像级 BCE
                   推理时 detection 不再取 local map 的 max-pool

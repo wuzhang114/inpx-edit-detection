@@ -1,4 +1,4 @@
-"""B: 标注成本口径审计 (P1-1) —— 区分 training-mask budget 与固定验证注记成本
+"""Separate training-mask budgets from fixed validation-annotation costs.
 输出: outputs/mask_cost_audit.json
 """
 import json

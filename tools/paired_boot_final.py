@@ -1,4 +1,4 @@
-"""P0-4 最终修正: canonical 源簇 + 正确配对(g2u)
+"""Historical paired bootstrap for the g2u source-cluster comparison.
 1) 检测 800 行: b0_s42 vs g2u_s42 (同制度), canonical 簇 bootstrap
 2) 像素损失对照: g2u_s42 (pixel-on) vs po_bALL_s42 (pixel-off) —— 同制度同 20ep/batch128/seed42
    报 micro IoU / pixel AUROC / det AUC 及配对 canonical 簇 bootstrap CI

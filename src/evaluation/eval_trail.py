@@ -1,4 +1,8 @@
-"""TRAIL (frozen DINO patch-drift) 在 500 集上的定位评测, 与主协议一致"""
+"""Historical TRAIL-map localization diagnostic on resized masks.
+
+This threshold-grid diagnostic differs from the native TRAIL evaluation.
+See tools/audit_trail_cached_20260918.py for the observed-score threshold audit.
+"""
 import glob
 import json
 from pathlib import Path

@@ -1,6 +1,6 @@
 """AutoSplice (WMF@CVPR2023) 外部验证: DALL-E 2 文本引导编辑, 跨编辑器家族迁移
 
-协议 (顶级 AI): 只用 JPEG-100; 固定阈值 (INP-X 验证集阈值 0.19); 报告检测 AUC + 定位 IoU;
+协议: 只用 JPEG-100; 固定阈值 (INP-X 验证集阈值 0.19); 报告检测 AUC + 定位 IoU;
 smoke test (--smoke 20) 先验证结构与 mask 对齐; 结果进 supplementary "out-of-family transfer"。
 
 用法: python eval_autosplice.py [--smoke 20] [--head weak_sup_v4_sd_seed42_head.pt] [--thr 0.19]

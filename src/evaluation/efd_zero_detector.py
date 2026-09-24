@@ -1,18 +1,9 @@
-"""方向三: 证据场→零训练检测器 (Zero-shot evidence-field detector)
+"""Historical mask-conditioned evidence-direction diagnostic.
 
-核心假设: 编辑图的扰动方向 d = mean(edit tokens) - mean(bg tokens) 会与
-方向库 V (来自训练池 4844 个不同编辑) 中的某个方向高度对齐, 而 real 图
-的扰动方向随机。用 max-cosine 相似度作为检测分数。
-
-关键验证:
-  1. 已知编辑 (库内): max-cos 应高 → 检测为编辑
-  2. 未见编辑 (库外, 如测试集编辑): max-cos 是否仍高? (泛化性)
-  3. real 图: max-cos 应低
-输出: AUC (编辑 vs real), 分位数, 与 g1 (0.928) 对比。
-
-优化 (避免边际随机): 检测分数不用"与库中任一方向最大相似度", 而用
-  库的中位数投影类似度或 top-k 平均相似度, 以减少偶然对齐。
-"""
+Scores compare mask-defined edited/background feature differences with a
+training direction library using the mean of the ten largest similarities.
+Invalid or absent masks receive zero scores. Because test masks affect the
+scores, this script is an oracle diagnostic, not a mask-free detector."""
 import json
 import os
 import sys
@@ -67,7 +58,7 @@ def main():
         return np.zeros(NP, np.float32)
 
     def perturb_dir(idx):
-        """编辑区扰动方向 (需要 mask; real 图无 mask -> 用全图平均? 用背景=全图?)"""
+        """Return a mask-conditioned direction, or None for an invalid mask."""
         mk = mask_of(idx)
         F = torch.from_numpy(dino_mm[idx].copy()).float()
         if mk.sum() < 4 or mk.sum() > NP * 0.9:

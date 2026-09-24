@@ -1,4 +1,4 @@
-"""Core interaction figure for the main text (TMM review direction 2).
+"""Plot exploratory interactions between readout capacity and mask budget.
 
 Plots, for each intervention (blur, low-pass, background blur):
   - task (detection / localization) x mask condition (true/random/shifted)

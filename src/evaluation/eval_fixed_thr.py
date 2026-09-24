@@ -1,4 +1,4 @@
-"""v4 固定阈值 0.5 定位评测 (与 DinoLizer 官方协议同口径, 500 编辑对)
+"""Fixed-threshold localization of the v4 readout on 500 edited images.
 
 协议: 图像 → DINOv2+hp 特征 → v4 头 → sigmoid 分数 (37×37) → 阈值 0.5 → mIoU/F1
 对比: DinoLizer 0.260 (固定0.5, 全分辨率) — 口径差异: 本脚本 37×37 网格

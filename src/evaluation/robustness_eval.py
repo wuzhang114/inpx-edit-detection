@@ -1,4 +1,4 @@
-"""后处理鲁棒性评测 (计划第 2 步)
+"""Evaluate sensitivity to image postprocessing.
 
 流程: 取 imdl_inpx_test.json 同批样本 (500 编辑对 + 300 real) → 图像级后处理
 (JPEG Q75/Q90、GaussianBlur σ=1、resize×0.5 再放大) → DINOv2 重抽特征 (免 VAE) →

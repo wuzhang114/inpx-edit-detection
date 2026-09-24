@@ -1,6 +1,6 @@
 """SDXL 现代编辑集评测: v4 头检测 AUC + 定位 mIoU
 
-统一协议 (顶级 AI 决策): INP-X-only 训练 → INP-X validation threshold (--thr) → zero-shot
+Evaluation protocol: INP-X-only training, INP-X validation threshold (--thr), and transfer
 用法: python src/evaluation/eval_sdxl.py [--head weak_sup_v4_head.pt] [--thr 0.45] [--edit_root D:/lunwen/data/sdxl_edits_500]
   不传 --thr 时保留 best-thr (oracle) 口径作参考
 产出: outputs/sdxl_eval_<head>_<tag>.json
@@ -122,4 +122,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

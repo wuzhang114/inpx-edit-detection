@@ -1,4 +1,8 @@
-"""提取 MagicBrush dev 集: target(编辑图) + mask + source(原图, 用于检测)"""
+"""Historical MagicBrush extraction using luminance-derived masks.
+
+For the manuscript results, use tools/repair_magicbrush_alpha_masks_v20.py
+to derive masks from the original RGBA alpha channel (alpha != 255).
+"""
 import io
 from pathlib import Path
 

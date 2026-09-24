@@ -1,0 +1,3 @@
+# Dependencies for the CPU budget-response analysis.
+numpy
+scipy

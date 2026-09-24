@@ -1,11 +1,9 @@
-"""弱监督 v4: 混合监督 (像素级 mask BCE+Dice + 图像级 BCE)
+"""Mixed-supervision patch readout and mask-budget experiments.
 
-动机: v3 (纯像素监督) 定位强 (跨域 mIoU 0.302) 但图像级检测弱 (AUC 0.68);
-      v2 (纯图像级弱监督) 检测强 (AUC 0.794) 但定位弱 (mIoU 0.222)。
-v4 同时优化两者: 像素级 BCE+Dice 监督 mask, 图像级 BCE 监督 max-pool 分数。
-
-loss = pixel_BCE + 0.5*pixel_Dice + λ_img * image_BCE   (λ_img=0.5)
-"""
+Combines image-level BCE on max-pooled patch scores with pixel BCE and Dice
+losses. The master-split training path supports nested mask budgets and a
+matched pixel-loss-off control. The legacy path retains its original loss
+weighting; use the master-split arguments for the manuscript protocol."""
 import argparse
 import json
 import re
@@ -130,7 +128,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
         print(f"leave-one-out: 排除 inpainter={exclude_model} 的编辑图 "
               f"({excl.sum()} 张), 训练集剩 {len(train_idx)}")
 
-    # 审稿修复: 排除独立评测集 (imdl_inpx_test.json 的 800 对) 的全部样本,
+    # Exclude all 800 evaluation records in imdl_inpx_test.json from the split.
     # 按 source key 排除 (standard + exchange 双版本 + real), 杜绝同编辑孪生版本泄漏
     # exclude_src_level=True 时升级为 source-disjoint: 按 {src} 前缀排除同源图所有属性编辑
     if exclude_json:
@@ -180,7 +178,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
     # ---- Content-Controlled Edit-Trace Supervision 配对表 ----
     # 负样本 (clean) 来源: ① sibling edit: 同 src 前缀的不同 key 编辑, 其未编辑位置 = 同场景 clean
     #                        ② real 文件 ({src}.jpg, 仅部分 key 可用)
-    # safe_region (顶级 AI): target_mask ∩ ~dilate(sibling_mask), 排除 sibling 编辑区及其邻域
+    # safe_region: target_mask ∩ ~dilate(sibling_mask), 排除 sibling 编辑区及其邻域
     fake_of_key = real_by_src = sibling_key = None
     if use_trace:
         from collections import defaultdict
@@ -223,14 +221,14 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
                   f"real 负样本 {n_real} ({n_real/max(len(fake_of_key),1)*100:.1f}%), "
                   f"至少一种 clean 来源 {n_clean} ({n_clean/max(len(fake_of_key),1)*100:.1f}%); "
                   f"L_pair (std<->exc) 可用 {n_pair_keys} 个 key")
-            # 固定配对 manifest: 保存映射摘要, 供各变体共用同一配对 (顶级 AI)
+            # 固定配对 manifest: 保存映射摘要, 供各变体共用同一配对
             manifest = {"fake_of_key": {k: v for k, v in fake_of_key.items()},
                         "real_by_src": real_by_src,
                         "sibling_key": sibling_key}
             with open(manifest_path, "w") as f:
                 json.dump(manifest, f)
             print(f"配对 manifest 已保存: {manifest_path}")
-        # safe_region 覆盖率统计 (顶级 AI): 每域有效配对/空区域/平均面积比
+        # safe_region 覆盖率统计: 每域有效配对/空区域/平均面积比
         from collections import defaultdict as _dd
         safe_stats = _dd(lambda: {"n_eff": 0, "n_empty": 0, "ratios": []})
         for k, v in fake_of_key.items():
@@ -267,7 +265,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
                             "mean_ratio": round(mean_ratio, 3)}
             print(f"  safe-region {d:12s}: 有效配对 {st['n_eff']}, 空区域 {st['n_empty']}, "
                   f"平均面积比 {mean_ratio:.2f}")
-        # 域加权 (顶级 AI): trace 项按域反比加权 + 均值归一化 + 上限 3x
+        # 域加权: trace 项按域反比加权 + 均值归一化 + 上限 3x
         # 归一化保证: sum(w_d * n_eff_d) == total_eff (加权前后总 trace 权重一致)
         dom_weights = {}
         total_eff = sum(st["n_eff"] for st in safe_stats.values())
@@ -335,7 +333,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
             trace_n = pair_n = 0
             if use_trace:
                 t_terms, p_terms = [], []
-                dom_trace_acc = defaultdict(float)   # 各域 trace loss 累计 (顶级 AI 日志要求)
+                dom_trace_acc = defaultdict(float)   # 各域 trace loss 累计
                 dom_trace_cnt = defaultdict(int)
                 for j, idx in enumerate(b_idx):
                     if labels_arr[idx] != 1:
@@ -345,7 +343,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
                     edit_mask = y[j] > 0.5
                     if edit_mask.sum() == 0:
                         continue
-                    # L_trace: safe_region = target_mask ∩ ~dilate(sibling_mask) (顶级 AI)
+                    # L_trace: safe_region = target_mask ∩ ~dilate(sibling_mask)
                     clean_idx = None
                     clean_mask = None
                     sk = sibling_key.get(k)
@@ -441,7 +439,7 @@ def train_v4(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
 
     fake_mask = y_t == 1
 
-    # ---- 固定阈值 (审稿修复): 在验证集上选全局最优阈值, 测试集不参与选阈值 ----
+    # Select the fixed localization threshold on validation data only.
     scores_v, masks_v = predict_patches(val_idx)
     val_fake = labels_arr[val_idx] == 1
     best_thr_val, best_miou_val = 0.5, 0.0
@@ -635,7 +633,7 @@ def train_v4_budget(epochs=20, batch_size=128, lr=1e-3, hidden=64, lam_img=0.5,
         for b0 in range(0, n_train, batch_size):
             bi = train_idx[perm[b0:b0 + batch_size]]
             if len(bi) < batch_size and k > 0:
-                # 保持掩码批固定大小 128: 不足时从对应批补? 直接不足就少算(最后一批)
+                # The mask batch matches the actual image batch, including the final partial batch.
                 pass
             if k > 0:
                 j = rng.choice(k, size=len(bi), replace=True)

@@ -1,4 +1,4 @@
-"""FLAME (ICML'26) LAD-only 公平对比: 500 编辑对 + 300 real
+"""FLAME LAD-only evaluation on 500 edited and 300 authentic images.
 
 协议与主表一致: 检测 AUC (detection_logit, real vs edit) + 定位 mIoU
 (coarse_mask 阈值 91 档 best-thr, 与 v4 同协议)。
